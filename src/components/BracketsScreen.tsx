@@ -16,6 +16,7 @@ interface BracketsScreenProps {
   winPoints: number;
   drawPoints: number;
   lossPoints: number;
+  manualStats: Record<string, PlayerStats>;
   onUpdateSemiFinals: (sf: SemiFinals) => void;
   onUpdateFinals: (fi: Finals) => void;
   onCompletePlayoffs: (winningPair: [string, string]) => void;
@@ -30,12 +31,13 @@ export default function BracketsScreen({
   winPoints,
   drawPoints,
   lossPoints,
+  manualStats,
   onUpdateSemiFinals,
   onUpdateFinals,
   onCompletePlayoffs,
   onGoToTab,
 }: BracketsScreenProps) {
-  const leaderboard = computeLeaderboard(players, rounds, winPoints, drawPoints, lossPoints);
+  const leaderboard = computeLeaderboard(players, rounds, winPoints, drawPoints, lossPoints, manualStats);
 
   // Auto-generate helper
   const handleAutoGenerateSemis = () => {
@@ -334,7 +336,7 @@ export default function BracketsScreen({
                 </div>
 
                 {/* Team 2 (Rank 3 & 6) */}
-                <div className="col-span-12 col-span-5 text-center space-y-1">
+                <div className="col-span-5 text-center space-y-1">
                   <select
                     className="w-full bg-slate-50 text-slate-800 text-xs font-bold border border-slate-200 rounded p-1.5 focus:outline-none focus:border-green-500"
                     value={semiFinals.semi2.pairB[0]}

@@ -371,8 +371,10 @@ export default function App() {
           winPoints={setup.winPoints}
           drawPoints={setup.drawPoints}
           lossPoints={setup.lossPoints}
+          manualStats={manualStats}
           onUpdateManualStats={handleUpdateManualStats}
           onNext={() => setCurrentTab("brackets")}
+          onGoToTab={(tab) => setCurrentTab(tab)}
         />
       )}
 
@@ -385,6 +387,7 @@ export default function App() {
           winPoints={setup.winPoints}
           drawPoints={setup.drawPoints}
           lossPoints={setup.lossPoints}
+          manualStats={manualStats}
           onUpdateSemiFinals={(sf) => setSemiFinals(sf)}
           onUpdateFinals={(fi) => setFinals(fi)}
           onCompletePlayoffs={(wp) => setWinningPair(wp)}
@@ -400,6 +403,7 @@ export default function App() {
           winPoints={setup.winPoints}
           drawPoints={setup.drawPoints}
           lossPoints={setup.lossPoints}
+          manualStats={manualStats}
           onResetEvent={handleResetEvent}
         />
       )}

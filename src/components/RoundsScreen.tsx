@@ -48,7 +48,9 @@ export default function RoundsScreen({
 
   // We locate the current active round
   const activeRound = rounds.find((r) => !r.isCompleted);
-  const currentRound = rounds.find((r) => r.roundNumber === selectedRoundNum) || activeRound || rounds[rounds.length - 1];
+  const currentRound = selectedRoundNum !== null
+    ? rounds.find((r) => r.roundNumber === selectedRoundNum)
+    : activeRound || rounds[rounds.length - 1];
 
   // Helper mapping
   const playerMap = useRef<Record<string, string>>({});
@@ -140,21 +142,34 @@ export default function RoundsScreen({
             Round Selector
           </span>
           <div className="flex gap-1 overflow-x-auto py-1 scrollbar-none max-w-[240px]">
-            {rounds.map((r) => (
-              <button
-                key={r.roundNumber}
-                onClick={() => setSelectedRoundNum(r.roundNumber)}
-                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
-                  selectedRoundNum === r.roundNumber
-                    ? "bg-slate-900 text-white font-bold"
-                    : r.isCompleted
-                    ? "bg-green-50 text-green-700 border border-green-100"
-                    : "bg-white text-slate-400 border border-slate-200"
-                }`}
-              >
-                R{r.roundNumber}
-              </button>
-            ))}
+            {[1, 2, 3, 4, 5].map((num) => {
+              const r = rounds.find((x) => x.roundNumber === num);
+              const isGenerated = !!r;
+              const isCompleted = r?.isCompleted || false;
+              const isSelected = selectedRoundNum === num;
+              const isSelectable = isGenerated || num === rounds.length + 1;
+
+              return (
+                <button
+                  key={num}
+                  disabled={!isSelectable}
+                  onClick={() => setSelectedRoundNum(num)}
+                  className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                    isSelected
+                      ? "bg-slate-900 text-white"
+                      : isCompleted
+                      ? "bg-green-50 text-green-700 border border-green-100"
+                      : isGenerated
+                      ? "bg-blue-50 text-blue-700 border border-blue-100"
+                      : isSelectable
+                      ? "bg-white text-slate-500 border border-slate-200 hover:border-slate-300"
+                      : "bg-slate-50 text-slate-300 border border-slate-100 opacity-40 cursor-not-allowed"
+                  }`}
+                >
+                  R{num}
+                </button>
+              );
+            })}
           </div>
         </div>
       )}
@@ -176,6 +191,25 @@ export default function RoundsScreen({
             className="bg-slate-900 hover:bg-slate-800 text-white font-bold text-sm px-6 py-3 rounded-xl shadow-md transition-transform active:scale-95 cursor-pointer"
           >
             Start Round 1 Rotation
+          </button>
+        </div>
+      ) : !currentRound ? (
+        <div className="flex-1 flex flex-col items-center justify-center text-center py-20 px-4 bg-white border border-dashed border-slate-200 rounded-3xl space-y-4 shadow-sm">
+          <div className="p-3 bg-indigo-50 rounded-full text-indigo-600 border border-indigo-100">
+            <Play className="w-8 h-8 fill-current ml-0.5" />
+          </div>
+          <div>
+            <h3 className="font-bold text-slate-800 text-base">Round {selectedRoundNum} Ready</h3>
+            <p className="text-xs text-slate-400 mt-2 max-w-xs leading-relaxed">
+              Once previous rounds are completed, click below to shuffle pairs and generate court matchups for Round {selectedRoundNum}.
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={onGenerateNextRound}
+            className="bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs px-6 py-3 rounded-xl shadow-md transition-transform active:scale-95 cursor-pointer"
+          >
+            Start Round {selectedRoundNum} Rotation
           </button>
         </div>
       ) : (
@@ -390,23 +424,37 @@ export default function RoundsScreen({
                 </button>
               </div>
             ) : (
-              <button
-                type="button"
-                onClick={onGenerateNextRound}
-                className="w-full bg-slate-900 text-white h-14 rounded-2xl font-bold text-sm flex items-center justify-center gap-2 active:scale-98 transition-all hover:bg-slate-800 cursor-pointer shadow-md"
-              >
-                {rounds.length >= 5 ? (
-                  <>
-                    <span>View Standings & Playoffs</span>
-                    <Award className="w-5 h-5 stroke-[2.5]" />
-                  </>
-                ) : (
-                  <>
-                    <span>Next Round Preview</span>
-                    <Play className="w-5 h-5 fill-current" />
-                  </>
-                )}
-              </button>
+              currentRound.roundNumber === rounds.length ? (
+                <button
+                  type="button"
+                  onClick={onGenerateNextRound}
+                  className="w-full bg-slate-900 text-white h-14 rounded-2xl font-bold text-sm flex items-center justify-center gap-2 active:scale-98 transition-all hover:bg-slate-800 cursor-pointer shadow-md"
+                >
+                  {rounds.length >= 5 ? (
+                    <>
+                      <span>View Standings & Playoffs</span>
+                      <Award className="w-5 h-5 stroke-[2.5]" />
+                    </>
+                  ) : (
+                    <>
+                      <span>Start Round {rounds.length + 1} Rotation</span>
+                      <Play className="w-4 h-4 fill-current ml-1" />
+                    </>
+                  )}
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => {
+                    const activeRound = rounds.find((r) => !r.isCompleted);
+                    setSelectedRoundNum(activeRound ? activeRound.roundNumber : rounds[rounds.length - 1].roundNumber);
+                  }}
+                  className="w-full bg-slate-100 text-slate-700 h-14 rounded-2xl font-bold text-sm flex items-center justify-center gap-2 active:scale-98 transition-all hover:bg-slate-200 cursor-pointer shadow-sm"
+                >
+                  <span>Switch to Live Round</span>
+                  <Play className="w-4 h-4 fill-current text-slate-500" />
+                </button>
+              )
             )}
           </div>
         </div>

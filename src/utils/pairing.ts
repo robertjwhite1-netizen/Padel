@@ -220,7 +220,8 @@ export function computeLeaderboard(
   rounds: Round[],
   winPoints = 3,
   drawPoints = 1,
-  lossPoints = 0
+  lossPoints = 0,
+  manualStats?: Record<string, PlayerStats>
 ): { rank: number; player: Player; stats: PlayerStats }[] {
   // Initialize map
   const statsMap: Record<string, PlayerStats> = {};
@@ -289,6 +290,18 @@ export function computeLeaderboard(
         statsMap[b1].points += drawPoints;
         statsMap[b2].draws += 1;
         statsMap[b2].points += drawPoints;
+      }
+    }
+  }
+
+  // Apply manual updates/overrides if provided
+  if (manualStats) {
+    for (const key of Object.keys(manualStats)) {
+      if (statsMap[key] && manualStats[key]) {
+        statsMap[key] = {
+          ...statsMap[key],
+          ...manualStats[key],
+        };
       }
     }
   }

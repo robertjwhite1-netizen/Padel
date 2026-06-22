@@ -15,6 +15,7 @@ interface WinnersScreenProps {
   winPoints: number;
   drawPoints: number;
   lossPoints: number;
+  manualStats: Record<string, PlayerStats>;
   onResetEvent: () => void;
 }
 
@@ -25,28 +26,28 @@ export default function WinnersScreen({
   winPoints,
   drawPoints,
   lossPoints,
+  manualStats,
   onResetEvent,
 }: WinnersScreenProps) {
   const [copied, setCopied] = useState(false);
   const [showResetConfirm, setShowResetConfirm] = useState(false);
 
   // Grab names
-  const playerMap = useRef<Record<string, string>>({});
-  useEffect(() => {
+  const playerMap = React.useMemo(() => {
     const map: Record<string, string> = {};
     for (const p of players) {
       map[p.id] = p.name;
     }
-    playerMap.current = map;
+    return map;
   }, [players]);
 
-  const getPlayerName = (id: string) => playerMap.current[id] || id;
+  const getPlayerName = (id: string) => playerMap[id] || id;
 
   const champ1Name = winningPair ? getPlayerName(winningPair[0]) : "TBD Champ";
   const champ2Name = winningPair ? getPlayerName(winningPair[1]) : "TBD Champ";
 
   // Compute final leaderboard
-  const finalLeaderboard = computeLeaderboard(players, rounds, winPoints, drawPoints, lossPoints);
+  const finalLeaderboard = computeLeaderboard(players, rounds, winPoints, drawPoints, lossPoints, manualStats);
 
   // Share message composer
   const handleShareResult = () => {

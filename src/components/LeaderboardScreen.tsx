@@ -14,8 +14,10 @@ interface LeaderboardScreenProps {
   winPoints: number;
   drawPoints: number;
   lossPoints: number;
+  manualStats: Record<string, PlayerStats>;
   onUpdateManualStats: (playerId: string, updatedStats: PlayerStats) => void;
   onNext: () => void;
+  onGoToTab: (tab: any) => void;
 }
 
 export default function LeaderboardScreen({
@@ -24,11 +26,13 @@ export default function LeaderboardScreen({
   winPoints,
   drawPoints,
   lossPoints,
+  manualStats,
   onUpdateManualStats,
   onNext,
+  onGoToTab,
 }: LeaderboardScreenProps) {
-  // We compute the leaderboard dynamically from past rounds
-  const originalLeaderboard = computeLeaderboard(players, rounds, winPoints, drawPoints, lossPoints);
+  // We compute the leaderboard dynamically from past rounds and manual stats overrides
+  const originalLeaderboard = computeLeaderboard(players, rounds, winPoints, drawPoints, lossPoints, manualStats);
 
   // Manual editing modal or row state
   const [editingPlayerId, setEditingPlayerId] = useState<string | null>(null);
@@ -236,11 +240,32 @@ export default function LeaderboardScreen({
       {/* Bottom Action Nav */}
       <div className="pt-2">
         <button
-          onClick={onNext}
+          onClick={() => {
+            const totalRoundsCount = rounds.length;
+            const isLastRoundCompleted = totalRoundsCount > 0 && rounds[totalRoundsCount - 1].isCompleted;
+            if (totalRoundsCount >= 5 && isLastRoundCompleted) {
+              onNext();
+            } else {
+              onGoToTab("rounds");
+            }
+          }}
           type="button"
           className="w-full bg-slate-900 hover:bg-slate-800 text-white h-14 rounded-2xl font-bold text-base shadow-sm active:scale-95 transition-all flex items-center justify-center gap-2 cursor-pointer"
         >
-          <span>Setup Semi-Finals & Brackets</span>
+          <span>
+            {(() => {
+              const totalRoundsCount = rounds.length;
+              const isLastRoundCompleted = totalRoundsCount > 0 && rounds[totalRoundsCount - 1].isCompleted;
+              if (totalRoundsCount < 5 || !isLastRoundCompleted) {
+                if (isLastRoundCompleted) {
+                  return `Proceed to Round ${totalRoundsCount + 1}`;
+                } else {
+                  return `Back to Round ${totalRoundsCount || 1} Play`;
+                }
+              }
+              return "Setup Semi-Finals & Brackets";
+            })()}
+          </span>
           <Award className="w-5 h-5 stroke-[2.5]" />
         </button>
       </div>
