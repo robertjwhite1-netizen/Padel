@@ -5,7 +5,6 @@
 
 import React, { useState, useEffect } from "react";
 import { EventSetup, Player, Round, SemiFinals, Finals, AppTab, PlayerStats } from "./types";
-import { DEFAULT_PLAYERS } from "./data/defaultPlayers";
 import { generateNextRound } from "./utils/pairing";
 
 // Component imports
@@ -57,9 +56,9 @@ export default function App() {
   const [players, setPlayers] = useState<Player[]>(() => {
     try {
       const saved = localStorage.getItem(STORAGE_KEYS.players);
-      return saved ? JSON.parse(saved) : DEFAULT_PLAYERS;
+      return saved ? JSON.parse(saved) : [];
     } catch {
-      return DEFAULT_PLAYERS;
+      return [];
     }
   });
 
@@ -271,9 +270,8 @@ export default function App() {
   };
 
   const handleResetEvent = () => {
-    // Purge everything
+    // Reset event data but keep the entered players roster intact
     setSetup(DEFAULT_SETUP);
-    setPlayers(DEFAULT_PLAYERS);
     setRounds([]);
     setSemiFinals(null);
     setFinals(null);
@@ -281,7 +279,13 @@ export default function App() {
     setManualStats({});
     setCurrentTab("setup");
     try {
-      localStorage.clear();
+      localStorage.removeItem(STORAGE_KEYS.setup);
+      localStorage.removeItem(STORAGE_KEYS.rounds);
+      localStorage.removeItem(STORAGE_KEYS.semiFinals);
+      localStorage.removeItem(STORAGE_KEYS.finals);
+      localStorage.removeItem(STORAGE_KEYS.winningPair);
+      localStorage.removeItem(STORAGE_KEYS.tab);
+      localStorage.removeItem(STORAGE_KEYS.manualStats);
     } catch {}
   };
 
