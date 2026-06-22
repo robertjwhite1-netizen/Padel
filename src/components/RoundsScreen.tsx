@@ -29,20 +29,25 @@ export default function RoundsScreen({
   onRegenerateCurrentRound,
   onEndRound,
 }: RoundsScreenProps) {
-  // We locate the current active round
-  const activeRound = rounds.find((r) => !r.isCompleted);
-  // Show last completed or active
+  // Show last completed or active selection
   const [selectedRoundNum, setSelectedRoundNum] = useState<number | null>(null);
 
-  // Synchronize on rounds array modifications
-  useEffect(() => {
-    if (activeRound) {
-      setSelectedRoundNum(activeRound.roundNumber);
-    } else if (rounds.length > 0 && selectedRoundNum === null) {
-      setSelectedRoundNum(rounds[rounds.length - 1].roundNumber);
-    }
-  }, [rounds, activeRound]);
+  const prevRoundsLengthRef = useRef(rounds.length);
 
+  useEffect(() => {
+    // If a new round was generated, automatically switch to it
+    if (rounds.length > prevRoundsLengthRef.current) {
+      setSelectedRoundNum(rounds[rounds.length - 1].roundNumber);
+    } else if (selectedRoundNum === null && rounds.length > 0) {
+      // First mount initialization
+      const active = rounds.find((r) => !r.isCompleted);
+      setSelectedRoundNum(active ? active.roundNumber : rounds[rounds.length - 1].roundNumber);
+    }
+    prevRoundsLengthRef.current = rounds.length;
+  }, [rounds.length, selectedRoundNum]);
+
+  // We locate the current active round
+  const activeRound = rounds.find((r) => !r.isCompleted);
   const currentRound = rounds.find((r) => r.roundNumber === selectedRoundNum) || activeRound || rounds[rounds.length - 1];
 
   // Helper mapping
@@ -381,7 +386,7 @@ export default function RoundsScreen({
                   className="bg-slate-900 disabled:opacity-40 text-white h-12 rounded-xl font-bold text-xs flex items-center justify-center gap-1.5 active:scale-98 transition-all hover:bg-slate-800 cursor-pointer disabled:pointer-events-none"
                 >
                   <Check className="w-4 h-4 stroke-[2.5]" />
-                  <span>Submit Results</span>
+                  <span>{currentRound.roundNumber === 5 ? "Submit Final Round" : "Submit Results"}</span>
                 </button>
               </div>
             ) : (
@@ -390,8 +395,17 @@ export default function RoundsScreen({
                 onClick={onGenerateNextRound}
                 className="w-full bg-slate-900 text-white h-14 rounded-2xl font-bold text-sm flex items-center justify-center gap-2 active:scale-98 transition-all hover:bg-slate-800 cursor-pointer shadow-md"
               >
-                <span>Next Round Preview</span>
-                <Play className="w-5 h-5 fill-current" />
+                {rounds.length >= 5 ? (
+                  <>
+                    <span>View Standings & Playoffs</span>
+                    <Award className="w-5 h-5 stroke-[2.5]" />
+                  </>
+                ) : (
+                  <>
+                    <span>Next Round Preview</span>
+                    <Play className="w-5 h-5 fill-current" />
+                  </>
+                )}
               </button>
             )}
           </div>

@@ -74,7 +74,7 @@ export default function ScheduleTimeline({
   ];
 
   return (
-    <div className="bg-slate-950/70 py-2 border-b border-slate-800/80 px-4 inline-flex w-full overflow-x-auto gap-3 scrollbar-none select-none shrink-0 scroll-smooth">
+    <div className="bg-white py-2 border-b border-slate-100 px-4 inline-flex w-full overflow-x-auto gap-3 scrollbar-none select-none shrink-0 scroll-smooth">
       {scheduleItems.map((item) => {
         const Icon = item.icon;
         const isActive = currentTab === item.tab;
@@ -85,24 +85,24 @@ export default function ScheduleTimeline({
             onClick={() => onTabChange(item.tab)}
             className={`flex items-center gap-2.5 px-3.5 py-2 rounded-xl transition-all duration-300 text-left cursor-pointer border shrink-0 ${
               isActive
-                ? "bg-emerald-500 text-slate-950 border-emerald-400 font-bold shadow-[0_4px_12px_rgba(16,185,129,0.2)] scale-102"
-                : "bg-slate-900 text-slate-400 border-slate-800 hover:text-slate-200 hover:border-slate-700"
+                ? "bg-slate-900 text-white border-slate-900 font-bold shadow-sm scale-102"
+                : "bg-slate-50 text-slate-500 border-slate-100 hover:text-slate-850 hover:border-slate-200"
             }`}
           >
             <div
               className={`p-1.5 rounded-lg shrink-0 ${
-                isActive ? "bg-slate-950/20 text-slate-950" : "bg-slate-950 text-emerald-400"
+                isActive ? "bg-white/10 text-white" : "bg-white text-slate-850 shadow-sm border border-slate-100"
               }`}
             >
               <Icon className="w-4 h-4" />
             </div>
             <div>
-              <div className="text-[12px] font-extrabold leading-none uppercase tracking-wide">
+              <div className="text-[12px] font-bold leading-none uppercase tracking-tight">
                 {item.label}
               </div>
               <div
                 className={`text-[9px] font-medium mt-0.5 leading-none ${
-                  isActive ? "text-slate-900/80" : "text-slate-500"
+                  isActive ? "text-slate-300" : "text-slate-400"
                 }`}
               >
                 {item.time}

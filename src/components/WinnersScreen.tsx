@@ -72,82 +72,82 @@ export default function WinnersScreen({
   };
 
   return (
-    <div className="flex-1 flex flex-col p-5 space-y-4 text-center">
+    <div className="flex-1 flex flex-col p-5 space-y-4 text-center bg-slate-50/50">
       
       {/* 1. Victory Celebration Area */}
-      <div className="bg-gradient-to-br from-amber-500/20 via-slate-950 to-slate-900 border border-amber-500/30 rounded-3xl p-5 relative overflow-hidden select-none">
+      <div className="bg-white border border-amber-200 rounded-3xl p-5 relative overflow-hidden select-none shadow-sm">
         {/* Confetti-like elements */}
-        <div className="absolute top-2 left-6 text-amber-400 rotate-12 opacity-30 text-xl">✨</div>
-        <div className="absolute top-6 right-6 text-amber-400 -rotate-12 opacity-30 text-xl">✨</div>
-        <div className="absolute bottom-4 left-4 text-amber-400 opacity-20 text-xs">⭐</div>
+        <div className="absolute top-2 left-6 text-amber-500 rotate-12 opacity-80 text-xl">✨</div>
+        <div className="absolute top-6 right-6 text-amber-500 -rotate-12 opacity-80 text-xl">✨</div>
+        <div className="absolute bottom-4 left-4 text-amber-500 opacity-60 text-xs">⭐</div>
 
-        <div className="w-16 h-16 bg-amber-500/10 rounded-full flex items-center justify-center text-amber-400 mx-auto border border-amber-500/20 shadow-[0_0_20px_rgba(245,158,11,0.2)]">
+        <div className="w-16 h-16 bg-amber-50 rounded-full flex items-center justify-center text-amber-600 mx-auto border border-amber-200/80 shadow-sm">
           <Trophy className="w-8 h-8" />
         </div>
 
-        <h2 className="text-sm uppercase font-black tracking-widest text-amber-500 mt-3.5">
+        <h2 className="text-xs uppercase font-bold tracking-tight text-amber-700 mt-3.5">
           Tournament Champions
         </h2>
 
         {winningPair ? (
-          <div className="mt-3.5 space-y-1">
-            <div className="text-xl font-black text-white leading-tight tracking-tight px-2">
-              {champ1Name} <span className="text-xs text-amber-500">&amp;</span> {champ2Name}
+          <div className="mt-3 space-y-1">
+            <div className="text-xl font-bold text-slate-800 leading-tight tracking-tight px-2">
+              {champ1Name} <span className="text-xs text-amber-700">&amp;</span> {champ2Name}
             </div>
-            <p className="text-[10px] text-amber-500/80 font-bold tracking-wider uppercase mt-1">
+            <p className="text-[10px] text-amber-700 font-bold tracking-wider uppercase mt-1">
               🏆 Grand playoff winners
             </p>
           </div>
         ) : (
-          <p className="text-xs text-slate-400 leading-normal mt-3 px-6">
+          <p className="text-xs text-slate-500 leading-normal mt-3 px-6 font-medium">
             Complete the final matchup in the brackets tab to populate the grand social champions!
           </p>
         )}
       </div>
 
       {/* 2. Compact Standings podium breakdown */}
-      <div className="bg-slate-950/40 border border-slate-850 rounded-2xl p-3.5 space-y-2 select-none">
-        <h3 className="text-[10px] uppercase font-bold text-slate-400 tracking-wider text-left border-b border-slate-900 pb-1.5 flex items-center gap-1">
-          <Star className="w-3.5 h-3.5 text-amber-400" />
+      <div className="bg-white border border-slate-100 rounded-2xl p-4 space-y-2 select-none shadow-sm">
+        <h3 className="text-[10px] uppercase font-bold text-slate-500 tracking-wider text-left border-b border-slate-100 pb-2 flex items-center gap-1">
+          <Star className="w-3.5 h-3.5 text-amber-500" />
           <span>Award Podiums (Matches Stats)</span>
         </h3>
 
         <div className="grid grid-cols-3 gap-2 py-1">
           {/* Most Wins */}
-          <div className="bg-slate-950/50 p-2 rounded-xl text-center border border-slate-900">
-            <div className="text-[8px] uppercase tracking-wider font-bold text-slate-500 leading-none">
+          <div className="bg-slate-50 p-2.5 rounded-xl text-center border border-slate-100">
+            <div className="text-[8px] uppercase tracking-wider font-bold text-slate-400 leading-none">
               Top Scorer
             </div>
-            <div className="text-[11px] font-extrabold text-amber-400 mt-1 truncate">
+            <div className="text-[11px] font-bold text-amber-700 mt-1 truncate">
               {finalLeaderboard[0]?.player.name || "N/A"}
             </div>
-            <div className="text-[9px] font-bold text-slate-400 mt-0.5">
+            <div className="text-[9px] font-bold text-slate-500 mt-0.5">
               {finalLeaderboard[0]?.stats.points || 0} pts
             </div>
           </div>
 
           {/* Social King (Most Draws / Active) */}
-          <div className="bg-slate-950/50 p-2 rounded-xl text-center border border-slate-900">
-            <div className="text-[8px] uppercase tracking-wider font-bold text-slate-500 leading-none">
+          <div className="bg-slate-50 p-2.5 rounded-xl text-center border border-slate-100">
+            <div className="text-[8px] uppercase tracking-wider font-bold text-slate-400 leading-none">
               Most Games
             </div>
-            <div className="text-[11px] font-extrabold text-blue-400 mt-1 truncate">
+            <div className="text-[11px] font-bold text-indigo-700 mt-1 truncate">
               {finalLeaderboard.reduce((prev, curr) => (prev.stats.gamesPlayed > curr.stats.gamesPlayed ? prev : curr), finalLeaderboard[0])?.player.name || "N/A"}
             </div>
-            <div className="text-[9px] font-bold text-slate-400 mt-0.5">
+            <div className="text-[9px] font-bold text-slate-500 mt-0.5">
               {finalLeaderboard.reduce((prev, curr) => (prev.stats.gamesPlayed > curr.stats.gamesPlayed ? prev : curr), finalLeaderboard[0])?.stats.gamesPlayed || 0} sets
             </div>
           </div>
 
           {/* Rested Buddy */}
-          <div className="bg-slate-950/50 p-2 rounded-xl text-center border border-slate-900">
-            <div className="text-[8px] uppercase tracking-wider font-bold text-slate-500 leading-none">
+          <div className="bg-slate-50 p-2.5 rounded-xl text-center border border-slate-100">
+            <div className="text-[8px] uppercase tracking-wider font-bold text-slate-400 leading-none">
               Chill Master
             </div>
-            <div className="text-[11px] font-extrabold text-teal-400 mt-1 truncate">
+            <div className="text-[11px] font-bold text-teal-700 mt-1 truncate">
               {finalLeaderboard.reduce((prev, curr) => (prev.stats.rests > curr.stats.rests ? prev : curr), finalLeaderboard[0])?.player.name || "N/A"}
             </div>
-            <div className="text-[9px] font-bold text-slate-400 mt-0.5">
+            <div className="text-[9px] font-bold text-slate-500 mt-0.5">
               {finalLeaderboard.reduce((prev, curr) => (prev.stats.rests > curr.stats.rests ? prev : curr), finalLeaderboard[0])?.stats.rests || 0} rests
             </div>
           </div>
@@ -158,7 +158,7 @@ export default function WinnersScreen({
       <div className="space-y-2 select-none pt-2">
         <button
           onClick={handleShareResult}
-          className="w-full bg-emerald-500 text-slate-950 h-13 rounded-xl font-bold text-xs flex items-center justify-center gap-2 shadow-md hover:bg-emerald-400 cursor-pointer"
+          className="w-full bg-slate-900 hover:bg-slate-800 text-white h-13 rounded-xl font-bold text-xs flex items-center justify-center gap-2 shadow-sm cursor-pointer"
         >
           {copied ? <Check className="w-4 h-4 stroke-[3]" /> : <Share2 className="w-4 h-4" />}
           <span>{copied ? "Copied Standings Summary!" : "Copy/Share Standings & Winners"}</span>
@@ -166,7 +166,7 @@ export default function WinnersScreen({
 
         <button
           onClick={() => setShowResetConfirm(true)}
-          className="w-full bg-slate-950 border border-slate-800 text-rose-500 h-12 rounded-xl font-extrabold text-xs flex items-center justify-center gap-1.5 active:bg-rose-950/15 cursor-pointer"
+          className="w-full bg-white border border-slate-200 text-rose-600 hover:bg-rose-50/50 h-12 rounded-xl font-bold text-xs flex items-center justify-center gap-1.5 cursor-pointer shadow-sm"
         >
           <RotateCcw className="w-4 h-4" />
           <span>Reset Event Data</span>
@@ -175,13 +175,13 @@ export default function WinnersScreen({
 
       {/* DANGEROUS ACTION MODAL CONFIRMATION */}
       {showResetConfirm && (
-        <div className="fixed inset-0 bg-black/85 flex items-center justify-center p-4 z-50 animate-fade-in select-none">
-          <div className="bg-slate-900 border border-slate-800 p-5 rounded-2xl max-w-sm w-full space-y-4">
-            <div className="flex gap-2 text-rose-400 items-start text-left">
+        <div className="fixed inset-0 bg-slate-900/60 flex items-center justify-center p-4 z-50 animate-fade-in select-none">
+          <div className="bg-white border border-slate-200 p-5 rounded-3xl max-w-sm w-full space-y-4 shadow-2xl">
+            <div className="flex gap-2.5 text-rose-600 items-start text-left">
               <AlertTriangle className="w-6 h-6 shrink-0 mt-0.5" />
               <div>
-                <h4 className="font-extrabold text-sm text-white">Full Deletion Notice</h4>
-                <p className="text-xs text-slate-400 leading-normal mt-1">
+                <h4 className="font-bold text-sm text-slate-800">Full Deletion Notice</h4>
+                <p className="text-xs text-slate-500 leading-normal mt-1 font-medium">
                   Are you absolutely certain you want to wipe all registered players, completed rounds, and leaderboard stats? This cannot be undone.
                 </p>
               </div>
@@ -189,7 +189,7 @@ export default function WinnersScreen({
             <div className="flex gap-2 justify-end">
               <button
                 onClick={() => setShowResetConfirm(false)}
-                className="px-3.5 py-2 rounded-xl text-xs bg-slate-950 hover:bg-slate-900 text-slate-400 font-bold cursor-pointer"
+                className="px-4 py-2 rounded-xl text-xs bg-slate-100 hover:bg-slate-200 text-slate-500 font-bold cursor-pointer transition-all"
               >
                 No, Keep It
               </button>
@@ -198,7 +198,7 @@ export default function WinnersScreen({
                   setShowResetConfirm(false);
                   onResetEvent();
                 }}
-                className="px-3.5 py-2 rounded-xl text-xs bg-rose-600 hover:bg-rose-500 text-white font-black cursor-pointer"
+                className="px-4 py-2 rounded-xl text-xs bg-rose-600 hover:bg-rose-500 text-white font-bold cursor-pointer transition-all shadow-sm"
               >
                 Yes, Purge All Data
               </button>

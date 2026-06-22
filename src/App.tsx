@@ -218,6 +218,10 @@ export default function App() {
   // ----------------------------------------------------
   const handleGenerateNextRound = () => {
     const nextRoundNumber = rounds.length + 1;
+    if (nextRoundNumber > 5) {
+      setCurrentTab("leaderboard");
+      return;
+    }
     const freshRound = generateNextRound(players, rounds, setup.courtsCount, nextRoundNumber);
     setRounds((prev) => [...prev, freshRound]);
     setCurrentTab("rounds");
