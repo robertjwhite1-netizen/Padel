@@ -1,0 +1,6 @@
+{
+  "name": "Noviun Padel",
+  "description": "An iPhone 15 optimized mobile app for organizing and running light-hearted padel social tournaments, featuring dynamic random doubles pairings, live player leaderboards, and automated finals.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
